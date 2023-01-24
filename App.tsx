@@ -10,6 +10,7 @@ import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { ThemeProvider } from 'styled-components';
 
 import { Groups } from 'Screens/Groups';
+import { NewGroup } from 'Screens/NewGroup';
 
 import theme from 'theme';
 
@@ -47,7 +48,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
         <StatusBar backgroundColor='transparent' style='light' />
-        <Groups />
+        <NewGroup />
       </View>
     </ThemeProvider>
   );

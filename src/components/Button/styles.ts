@@ -12,7 +12,6 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
     border-radius: 6px;
     justify-content: center;
     align-items: center;
-    margin-bottom: 42px;
     background: ${type === 'primary'
       ? theme.colors.green_700
       : theme.colors.red_dark};
