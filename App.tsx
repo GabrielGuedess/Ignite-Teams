@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
 
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -9,7 +8,7 @@ import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 
 import { ThemeProvider } from 'styled-components/native';
 
-import { Players } from 'Screens/Players';
+import { Routes } from 'routes';
 
 import theme from 'theme';
 
@@ -45,10 +44,8 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-        <StatusBar backgroundColor='transparent' style='light' />
-        <Players />
-      </View>
+      <StatusBar backgroundColor='transparent' style='light' />
+      <Routes onReady={onLayoutRootView} />
     </ThemeProvider>
   );
 }
