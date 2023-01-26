@@ -42,7 +42,12 @@ export const Groups = () => {
       <FlatList
         data={groups}
         keyExtractor={item => item}
-        renderItem={({ item }) => <GroupCard title={item} />}
+        renderItem={({ item }) => (
+          <GroupCard
+            title={item}
+            onPress={() => navigate('players', { group: item })}
+          />
+        )}
         ListEmptyComponent={() => (
           <ListEmpty message='Que tal cadastrar a primeira turma?' />
         )}
