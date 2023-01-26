@@ -7,16 +7,17 @@ import { Input } from 'components/Input';
 import { Header } from 'components/Header';
 import { Button } from 'components/Button';
 import { Filter } from 'components/Filter';
+import { Loading } from 'components/Loading';
 import { Highlight } from 'components/Highlight';
 import { ListEmpty } from 'components/ListEmpty';
 import { PlayerCard } from 'components/PlayerCard';
 import { ButtonIcon } from 'components/ButtonIcon';
 
-import { playerAddByGroup } from 'storage/players/playerAddByGroup';
-import { PlayerStorageDTO } from 'storage/players/PlayerStorageDTO';
-import { playerGetByGroupAndTeam } from 'storage/players/playerGetByGroupAndTeam';
-import { playerRemoveByGroup } from 'storage/players/playerRemoveByGroup';
 import { groupRemoveByName } from 'storage/group/groupRemoveByName';
+import { PlayerStorageDTO } from 'storage/players/PlayerStorageDTO';
+import { playerAddByGroup } from 'storage/players/playerAddByGroup';
+import { playerRemoveByGroup } from 'storage/players/playerRemoveByGroup';
+import { playerGetByGroupAndTeam } from 'storage/players/playerGetByGroupAndTeam';
 
 import { AppError } from 'utils/AppError';
 
@@ -30,6 +31,7 @@ export const Players = () => {
   const [team, setTeam] = useState('Time A');
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const { navigate } = useNavigation();
 
@@ -69,12 +71,16 @@ export const Players = () => {
 
   async function fetchPlayersByTeam() {
     try {
+      setIsLoading(true);
+
       const playersByTeam = await playerGetByGroupAndTeam(group, team);
 
       setPlayers(playersByTeam);
     } catch (error) {
       Alert.alert('Pessoas', 'Não foi possível carregar as pessoas do time');
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -153,24 +159,28 @@ export const Players = () => {
         <S.NumberOfPlayers>{players.length}</S.NumberOfPlayers>
       </S.HeaderList>
 
-      <FlatList
-        data={players}
-        keyExtractor={item => item.name}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <PlayerCard
-            name={item.name}
-            onRemove={() => handlePlayerRemove(item.name)}
-          />
-        )}
-        ListEmptyComponent={() => (
-          <ListEmpty message='Não há pessoas nesse time' />
-        )}
-        contentContainerStyle={[
-          { paddingBottom: 100 },
-          players.length === 0 && { flex: 1 },
-        ]}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={players}
+          keyExtractor={item => item.name}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <PlayerCard
+              name={item.name}
+              onRemove={() => handlePlayerRemove(item.name)}
+            />
+          )}
+          ListEmptyComponent={() => (
+            <ListEmpty message='Não há pessoas nesse time' />
+          )}
+          contentContainerStyle={[
+            { paddingBottom: 100 },
+            players.length === 0 && { flex: 1 },
+          ]}
+        />
+      )}
 
       <Button
         type='secondary'
